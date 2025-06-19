@@ -1,71 +1,235 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
+<!DOCTYPE html><html lang="tr"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>İsra'ya Özel</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            text-align: center;
-            background-color: #ffe4e1;
             margin: 0;
-            padding: 0;
-            transition: background-color 0.5s ease;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(to right, #ff9a9e, #fad0c4);
+            overflow-x: hidden;
+        }.page {
+        display: none;
+        padding: 50px 20px;
+        text-align: center;
+        animation: fadeIn 1s;
+    }
+
+    .active {
+        display: block;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
         }
-        .page {
-            display: none;
-            padding: 50px 20px;
+
+        to {
+            opacity: 1;
         }
-        .active {
-            display: block;
+    }
+
+    button {
+        padding: 15px 30px;
+        font-size: 18px;
+        background-color: #ff4f81;
+        border: none;
+        border-radius: 10px;
+        color: white;
+        cursor: pointer;
+        margin-top: 20px;
+        transition: transform 0.2s;
+    }
+
+    button:hover {
+        transform: scale(1.1);
+    }
+
+    .heart {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: red;
+        transform: rotate(45deg);
+        animation: float 5s infinite;
+    }
+
+    .heart::before,
+    .heart::after {
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: red;
+        border-radius: 50%;
+    }
+
+    .heart::before {
+        top: -10px;
+        left: 0;
+    }
+
+    .heart::after {
+        left: -10px;
+        top: 0;
+    }
+
+    @keyframes float {
+        0% {
+            transform: translateY(0) rotate(45deg);
+            opacity: 1;
         }
-        button {
-            padding: 10px 20px;
-            font-size: 18px;
-            background-color: #ff69b4;
-            border: none;
-            border-radius: 10px;
-            color: white;
-            cursor: pointer;
-            margin-top: 20px;
+
+        100% {
+            transform: translateY(-600px) rotate(45deg);
+            opacity: 0;
         }
-    </style>
-</head>
-<body>
+    }
 
-    <div id="page1" class="page active">
-        <h1>Hoş Geldin İsra! 🌸</h1>
-        <p>Senin için küçük bir sürpriz hazırladım.</p>
-        <button onclick="nextPage(2)">Devam Et</button>
-    </div>
+    .witch {
+        position: fixed;
+        bottom: 20px;
+        left: -100px;
+        width: 50px;
+        height: 50px;
+        background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Witch_Silhouette.svg/1200px-Witch_Silhouette.svg.png') no-repeat center/contain;
+        animation: fly 10s linear infinite;
+    }
 
-    <div id="page2" class="page">
-        <h1>Sana söyleyeceklerim var! 💌</h1>
-        <p>Sen benim için çok özelsin... ama arada bir cadı oluyorsun! 😂</p>
-        <button onclick="nextPage(3)">Devam Et</button>
-    </div>
-
-    <div id="page3" class="page">
-        <h1>Seninle Geçirdiğim Zamanlar Çok Güzel 💖</h1>
-        <p>İyi ki varsın İsra! (Küçük bir cadı olsan da seviyorum 😜)</p>
-        <button onclick="nextPage(4)">Devam Et</button>
-    </div>
-
-    <div id="page4" class="page">
-        <h1>Sana Son Sözüm!</h1>
-        <p>İsra, sen dünyanın en tatlı cadısısın! 🧙‍♀️💕</p>
-        <p>Sana bu siteyi hediye ettim, umarım beğenmişsindir!</p>
-        <button onclick="nextPage(1)">Başa Dön 😊</button>
-    </div>
-
-    <script>
-        function nextPage(pageNumber) {
-            const pages = document.querySelectorAll('.page');
-            pages.forEach(page => page.classList.remove('active'));
-            document.getElementById('page' + pageNumber).classList.add('active');
+    @keyframes fly {
+        0% {
+            left: -100px;
+            bottom: 50px;
         }
-    </script>
 
-</body>
-</html>
+        50% {
+            left: 50%;
+            bottom: 300px;
+        }
+
+        100% {
+            left: 110%;
+            bottom: 50px;
+        }
+    }
+
+    #wheel {
+        margin: 20px auto;
+        width: 300px;
+        height: 300px;
+        border: 10px solid #ff4f81;
+        border-radius: 50%;
+        position: relative;
+        animation: spin 0s;
+    }
+
+    .segment {
+        position: absolute;
+        width: 50%;
+        height: 50%;
+        background-color: #f9c5d1;
+        border: 2px solid white;
+        transform-origin: 100% 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        text-align: center;
+        padding: 5px;
+    }
+
+    @keyframes spin {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(3600deg);
+        }
+    }
+</style>
+
+</head><body><div class="witch"></div>
+
+<div id="page1" class="page active">
+    <h1>Hoş Geldin İsra! 🌸</h1>
+    <p>Minik tatlı kız, hoş geldin! Ama arada bir cadı oluyorsun 😂</p>
+    <button onclick="nextPage(2)">Devam Et</button>
+</div>
+
+<div id="page2" class="page">
+    <h1>Sivilcelerini Seviyoruz 💕</h1>
+    <p>Şok marketin prensesi, sivilcelerin bile tatlı!</p>
+    <button onclick="nextPage(3)">Devam Et</button>
+</div>
+
+<div id="page3" class="page">
+    <h1>Zengin Koca Mı? 😂</h1>
+    <p>Ben fakirim ama sana kalbimi veriyorum. Zengin kocan altın alır mı, ben sana bu siteyi yaptım!</p>
+    <button onclick="nextPage(4)">Devam Et</button>
+</div>
+
+<div id="page4" class="page">
+    <h1>Altın Delisi Mişin? 😂</h1>
+    <p>Sana bol bol sanal altın gönderdim! 🪙🪙🪙</p>
+    <button onclick="nextPage(5)">Çarkıfelek Oyna!</button>
+</div>
+
+<div id="page5" class="page">
+    <h1>Çarkıfelek Zamanı! 🎡</h1>
+    <div id="wheel"></div>
+    <button onclick="spinWheel()">Çevir!</button>
+    <p id="result"></p>
+    <button onclick="nextPage(1)">Başa Dön 😊</button>
+</div>
+
+<script>
+    let currentPage = 1;
+
+    function nextPage(pageNumber) {
+        document.getElementById('page' + currentPage).classList.remove('active');
+        document.getElementById('page' + pageNumber).classList.add('active');
+        currentPage = pageNumber;
+    }
+
+    // Kalp animasyonu
+    setInterval(() => {
+        const heart = document.createElement('div');
+        heart.classList.add('heart');
+        heart.style.left = Math.random() * window.innerWidth + 'px';
+        heart.style.top = window.innerHeight + 'px';
+        document.body.appendChild(heart);
+
+        setTimeout(() => {
+            heart.remove();
+        }, 5000);
+    }, 300);
+
+    // Çarkıfelek kodu
+    const wheelOptions = ['Sinan\'ı Öp 💋', 'Sinan\'ı Döv 🤕', 'Sinan\'la Evlen 💍', 'Sinan\'a \"Seni Seviyorum\" Yaz 💌'];
+
+    function spinWheel() {
+        const result = wheelOptions[Math.floor(Math.random() * wheelOptions.length)];
+        document.getElementById('result').innerText = result;
+        const wheel = document.getElementById('wheel');
+        wheel.style.animation = 'spin 4s ease-out';
+        setTimeout(() => {
+            wheel.style.animation = '';
+        }, 4000);
+    }
+
+    // Çark görseli oluşturma
+    window.onload = () => {
+        const wheel = document.getElementById('wheel');
+        const segmentCount = wheelOptions.length;
+        for (let i = 0; i < segmentCount; i++) {
+            const segment = document.createElement('div');
+            segment.classList.add('segment');
+            segment.style.transform = `rotate(${(360 / segmentCount) * i}deg) skewY(-30deg)`;
+            segment.innerText = wheelOptions[i];
+            wheel.appendChild(segment);
+        }
+    };
+</script>
+
+</body></html>

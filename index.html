@@ -3,18 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sevgilime Özel Site</title>
+    <title>İsra'ya Özel</title>
     <style>
-        body { 
-            background-color: pink; 
-            text-align: center; 
-            font-family: Arial, sans-serif;
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background-color: #ffe4e1;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.5s ease;
         }
-        h1 { margin-top: 100px; color: red; }
+        .page {
+            display: none;
+            padding: 50px 20px;
+        }
+        .active {
+            display: block;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #ff69b4;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
-    <h1>Sana Özel Bu Sürpriz Site! ❤️</h1>
-    <p>Seni çok seviyorum!</p>
+
+    <div id="page1" class="page active">
+        <h1>Hoş Geldin İsra! 🌸</h1>
+        <p>Senin için küçük bir sürpriz hazırladım.</p>
+        <button onclick="nextPage(2)">Devam Et</button>
+    </div>
+
+    <div id="page2" class="page">
+        <h1>Sana söyleyeceklerim var! 💌</h1>
+        <p>Sen benim için çok özelsin... ama arada bir cadı oluyorsun! 😂</p>
+        <button onclick="nextPage(3)">Devam Et</button>
+    </div>
+
+    <div id="page3" class="page">
+        <h1>Seninle Geçirdiğim Zamanlar Çok Güzel 💖</h1>
+        <p>İyi ki varsın İsra! (Küçük bir cadı olsan da seviyorum 😜)</p>
+        <button onclick="nextPage(4)">Devam Et</button>
+    </div>
+
+    <div id="page4" class="page">
+        <h1>Sana Son Sözüm!</h1>
+        <p>İsra, sen dünyanın en tatlı cadısısın! 🧙‍♀️💕</p>
+        <p>Sana bu siteyi hediye ettim, umarım beğenmişsindir!</p>
+        <button onclick="nextPage(1)">Başa Dön 😊</button>
+    </div>
+
+    <script>
+        function nextPage(pageNumber) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            document.getElementById('page' + pageNumber).classList.add('active');
+        }
+    </script>
+
 </body>
 </html>

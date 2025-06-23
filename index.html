@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="tr">
+<!DOCTYPE html>
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -6,32 +7,39 @@
     <style>
         body {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
             background-color: #f0f0f0;
             font-family: Arial, sans-serif;
         }
+        .wheel-container {
+            position: relative;
+        }
         .wheel {
             width: 300px;
             height: 300px;
             border: 10px solid #333;
             border-radius: 50%;
-            position: relative;
             overflow: hidden;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            position: relative;
+            transition: transform 4s cubic-bezier(0.33, 1, 0.68, 1);
         }
-        .wheel div {
+        .wheel-segment {
             position: absolute;
             width: 50%;
             height: 50%;
-            transform-origin: 100% 100%;
-            text-align: right;
-            padding: 10px;
-            box-sizing: border-box;
-            font-weight: bold;
-            color: #fff;
+            top: 50%;
+            left: 50%;
+            transform-origin: 0% 0%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
             font-size: 14px;
+            text-align: center;
+            padding: 5px;
         }
         .pointer {
             width: 0;
@@ -40,7 +48,7 @@
             border-right: 20px solid transparent;
             border-bottom: 30px solid red;
             position: absolute;
-            top: -30px;
+            top: -40px;
             left: 50%;
             transform: translateX(-50%);
         }
@@ -53,19 +61,25 @@
     </style>
 </head>
 <body>
+
+<div class="wheel-container">
     <div class="pointer"></div>
     <div class="wheel" id="wheel"></div>
-    <button onclick="spinWheel()">Çevir</button><audio id="tickSound" src="https://www.soundjay.com/button/beep-07.wav"></audio>
+</div>
+
+<button onclick="spinWheel()">Çevir</button>
+
+<audio id="tickSound" src="https://www.soundjay.com/button/beep-07.wav"></audio>
 
 <script>
     const options = [
-        'Sinan'ın kucağında uyu',
-        'Sinan'ı öp',
-        'Sinan'ı döv',
+        'Sinan\'ın kucağında uyu',
+        'Sinan\'ı öp',
+        'Sinan\'ı döv',
         'Sinan senin koynunda uyusun',
-        'Sinan'a seni seviyorum de',
+        'Sinan\'a seni seviyorum de',
         'Sinan ile evlen',
-        'Sinan'a söv'
+        'Sinan\'a söv'
     ];
 
     const colors = ['#ff4d4d', '#4d79ff', '#4dff4d', '#ffa64d', '#ff4da6', '#4dffff', '#b84dff'];
@@ -74,31 +88,34 @@
 
     options.forEach((option, index) => {
         const segment = document.createElement('div');
-        segment.style.transform = `rotate(${index * (360 / options.length)}deg) skewY(-${90 - (360 / options.length)}deg)`;
+        const angle = 360 / options.length;
+
+        segment.className = 'wheel-segment';
         segment.style.backgroundColor = colors[index % colors.length];
-        segment.innerHTML = `<span style="transform: skewY(${90 - (360 / options.length)}deg) rotate(${(360 / options.length) / 2}deg); display: inline-block;">${option}</span>`;
+        segment.style.transform = `rotate(${index * angle}deg) skewY(-${90 - angle}deg)`;
+
+        segment.innerHTML = `<div style="transform: skewY(${90 - angle}deg) rotate(${angle / 2}deg);">${option}</div>`;
         wheel.appendChild(segment);
     });
 
-    let rotation = 0;
+    let currentRotation = 0;
 
     function spinWheel() {
         const tickSound = document.getElementById('tickSound');
-        let spins = Math.floor(Math.random() * 5) + 5;
-        let degreesPerSpin = 360;
-        let totalRotation = spins * degreesPerSpin + Math.floor(Math.random() * 360);
-        let currentRotation = rotation;
-        let step = 5;
+        let spinAmount = Math.floor(Math.random() * 360) + 1080; // En az 3 tur dönsün
+        currentRotation += spinAmount;
 
-        const interval = setInterval(() => {
-            currentRotation += step;
-            wheel.style.transform = `rotate(${currentRotation}deg)`;
+        wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+        // Ses efekti için
+        let ticks = 30; // Ses sayısı
+        let interval = setInterval(() => {
             tickSound.play();
-            if (currentRotation >= rotation + totalRotation) {
+            ticks--;
+            if (ticks <= 0) {
                 clearInterval(interval);
-                rotation = currentRotation % 360;
             }
-        }, 50);
+        }, 150);
     }
 </script>
 

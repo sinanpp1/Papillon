@@ -1,323 +1,106 @@
-<!DOCTYPE html><html lang="tr"><head>
+<!DOCTYPE html><html lang="tr">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>İsra'ya Özel</title>
+    <title>Sinan'ın Çarkı</title>
     <style>
         body {
-            margin: 0;
-            font-family: 'Verdana', sans-serif;
-            overflow-x: hidden;
-            transition: background 1s ease;
-        }.page {
-        display: none;
-        padding: 50px 20px;
-        text-align: center;
-        animation: fadeIn 1s;
-    }
-
-    .active {
-        display: block;
-    }
-
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
         }
-
-        to {
-            opacity: 1;
+        .wheel {
+            width: 300px;
+            height: 300px;
+            border: 10px solid #333;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
-    }
-
-    button {
-        padding: 15px 30px;
-        font-size: 18px;
-        background-color: #ff4f81;
-        border: none;
-        border-radius: 10px;
-        color: white;
-        cursor: pointer;
-        margin-top: 20px;
-        transition: transform 0.2s;
-    }
-
-    button:hover {
-        transform: scale(1.1);
-    }
-
-    .witch {
-        position: fixed;
-        bottom: 20px;
-        left: -100px;
-        width: 50px;
-        height: 50px;
-        background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Witch_Silhouette.svg/1200px-Witch_Silhouette.svg.png') no-repeat center/contain;
-        animation: fly 15s linear infinite;
-    }
-
-    @keyframes fly {
-        0% {
-            left: -100px;
-            bottom: 50px;
+        .wheel div {
+            position: absolute;
+            width: 50%;
+            height: 50%;
+            transform-origin: 100% 100%;
+            text-align: right;
+            padding: 10px;
+            box-sizing: border-box;
+            font-weight: bold;
+            color: #fff;
+            font-size: 14px;
         }
-
-        50% {
+        .pointer {
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-bottom: 30px solid red;
+            position: absolute;
+            top: -30px;
             left: 50%;
-            bottom: 300px;
+            transform: translateX(-50%);
         }
-
-        100% {
-            left: 110%;
-            bottom: 50px;
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
         }
-    }
-
-    .coin {
-        position: absolute;
-        width: 30px;
-        height: 30px;
-        background: url('https://cdn-icons-png.flaticon.com/512/138/138281.png') no-repeat center/contain;
-        animation: fall 4s linear infinite;
-    }
-
-    @keyframes fall {
-        0% {
-            transform: translateY(-50px);
-            opacity: 1;
-        }
-
-        100% {
-            transform: translateY(800px);
-            opacity: 0;
-        }
-    }
-
-    #wheel-container {
-        position: relative;
-        width: 300px;
-        height: 300px;
-        margin: 20px auto;
-    }
-
-    #wheel {
-        width: 100%;
-        height: 100%;
-        border: 10px solid #ff4f81;
-        border-radius: 50%;
-        position: relative;
-        transition: transform 4s ease-out;
-    }
-
-    .segment {
-        position: absolute;
-        width: 50%;
-        height: 50%;
-        background-color: #f9c5d1;
-        border: 2px solid white;
-        transform-origin: 100% 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        text-align: center;
-        padding: 5px;
-    }
-
-    #pointer {
-        width: 0;
-        height: 0;
-        border-left: 20px solid transparent;
-        border-right: 20px solid transparent;
-        border-bottom: 30px solid #ff4f81;
-        margin: 0 auto;
-    }
-
-    #gameArea {
-        width: 100%;
-        height: 400px;
-        position: relative;
-        background-color: #fff;
-        border: 2px solid #ff4f81;
-        overflow: hidden;
-    }
-
-    .fallingHeart {
-        position: absolute;
-        width: 40px;
-        height: 40px;
-        background: url('https://cdn-icons-png.flaticon.com/512/833/833472.png') no-repeat center/contain;
-        animation: fallHeart 5s linear;
-    }
-
-    @keyframes fallHeart {
-        0% {
-            top: -50px;
-        }
-
-        100% {
-            top: 400px;
-        }
-    }
-
-    .surprise-box {
-        width: 100px;
-        height: 100px;
-        margin: 20px auto;
-        background: url('https://cdn-icons-png.flaticon.com/512/675/675892.png') no-repeat center/contain;
-        cursor: pointer;
-        transition: transform 0.3s;
-    }
-
-    .surprise-box:hover {
-        transform: scale(1.1);
-    }
-</style>
-
-</head><body><audio autoplay loop>
-    <source src="https://www.bensound.com/bensound-music/bensound-tomorrow.mp3" type="audio/mpeg">
-</audio>
-
-<div class="witch"></div>
-
-<div id="page1" class="page active">
-    <h1>Hoş Geldin İsra! 🌸</h1>
-    <p>Minik tatlı kız, hoş geldin! Ama arada bir cadı oluyorsun 😂</p>
-    <button onclick="nextPage(2)">Devam Et</button>
-</div>
-
-<div id="page2" class="page">
-    <h1>Sivilcelerini Seviyoruz 💕</h1>
-    <p>Şok marketin prensesi, sivilcelerin bile tatlı!</p>
-    <button onclick="nextPage(3)">Devam Et</button>
-</div>
-
-<div id="page3" class="page">
-    <h1>Zengin Koca Mı? 😂</h1>
-    <p>Ben fakirim ama sana kalbimi veriyorum. Zengin kocan altın alır mı, ben sana bu siteyi yaptım!</p>
-    <button onclick="nextPage(4)">Devam Et</button>
-</div>
-
-<div id="page4" class="page">
-    <h1>Altın Delisi Mişin? 😂</h1>
-    <p>Sana bol bol sanal altın gönderdim! 🪙🪙🪙</p>
-    <button onclick="startCoins()">Altın Yağmuru Başlat</button>
-    <button onclick="nextPage(5)">Çarkıfelek Oyna!</button>
-</div>
-
-<div id="page5" class="page">
-    <h1>Çarkıfelek Zamanı! 🎡</h1>
-    <div id="pointer"></div>
-    <div id="wheel-container">
-        <div id="wheel"></div>
-    </div>
-    <button onclick="spinWheel()">Çevir!</button>
-    <p id="result"></p>
-    <button onclick="nextPage(6)">Yeni Oyun Oyna!</button>
-</div>
-
-<div id="page6" class="page">
-    <h1>Kalp Yakalama Oyunu 💖</h1>
-    <p>Düşen kalplere tıkla ve Sinan'ın kalbini yakala!</p>
-    <div id="gameArea"></div>
-    <p id="score">Skor: 0</p>
-    <button onclick="startGame()">Oyunu Başlat</button>
-    <button onclick="nextPage(7)">Sürpriz Kutular 🎁</button>
-</div>
-
-<div id="page7" class="page">
-    <h1>Sürpriz Kutular 🎁</h1>
-    <p>Bir kutuya tıkla ve sürprizini keşfet!</p>
-    <div class="surprise-box" onclick="openSurprise('Bugün Sinan seni çok seviyor 💌')"></div>
-    <div class="surprise-box" onclick="openSurprise('Sinan sana çikolata alacak 🍫')"></div>
-    <div class="surprise-box" onclick="openSurprise('Sinan seni gezmeye götürecek 🚗')"></div>
-    <p id="surprise-message"></p>
-    <button onclick="nextPage(1)">Başa Dön 😊</button>
-</div>
+    </style>
+</head>
+<body>
+    <div class="pointer"></div>
+    <div class="wheel" id="wheel"></div>
+    <button onclick="spinWheel()">Çevir</button><audio id="tickSound" src="https://www.soundjay.com/button/beep-07.wav"></audio>
 
 <script>
-    let currentPage = 1;
-    const backgrounds = ['linear-gradient(to right, #ff9a9e, #fad0c4)', '#c2e9fb', '#d4fc79', '#fbc2eb', '#a1c4fd', '#d1c4e9', '#ffe0ac'];
+    const options = [
+        'Sinan'ın kucağında uyu',
+        'Sinan'ı öp',
+        'Sinan'ı döv',
+        'Sinan senin koynunda uyusun',
+        'Sinan'a seni seviyorum de',
+        'Sinan ile evlen',
+        'Sinan'a söv'
+    ];
 
-    function nextPage(pageNumber) {
-        document.getElementById('page' + currentPage).classList.remove('active');
-        document.getElementById('page' + pageNumber).classList.add('active');
-        document.body.style.background = backgrounds[(pageNumber - 1) % backgrounds.length];
-        currentPage = pageNumber;
-    }
+    const colors = ['#ff4d4d', '#4d79ff', '#4dff4d', '#ffa64d', '#ff4da6', '#4dffff', '#b84dff'];
 
-    function startCoins() {
-        setInterval(() => {
-            const coin = document.createElement('div');
-            coin.classList.add('coin');
-            coin.style.left = Math.random() * window.innerWidth + 'px';
-            coin.style.top = '-50px';
-            document.body.appendChild(coin);
+    const wheel = document.getElementById('wheel');
 
-            setTimeout(() => {
-                coin.remove();
-            }, 4000);
-        }, 300);
-    }
+    options.forEach((option, index) => {
+        const segment = document.createElement('div');
+        segment.style.transform = `rotate(${index * (360 / options.length)}deg) skewY(-${90 - (360 / options.length)}deg)`;
+        segment.style.backgroundColor = colors[index % colors.length];
+        segment.innerHTML = `<span style="transform: skewY(${90 - (360 / options.length)}deg) rotate(${(360 / options.length) / 2}deg); display: inline-block;">${option}</span>`;
+        wheel.appendChild(segment);
+    });
 
-    const wheelOptions = ['Sinan\'ı Öp 💋', 'Sinan\'ı Döv 🤕', 'Sinan\'la Evlen 💍', 'Sinan\'a \"Seni Seviyorum\" Yaz 💌'];
-    let currentRotation = 0;
+    let rotation = 0;
 
     function spinWheel() {
-        const wheel = document.getElementById('wheel');
-        const randomSpin = 1440 + Math.floor(Math.random() * 360);
-        currentRotation += randomSpin;
-        wheel.style.transform = `rotate(${currentRotation}deg)`;
+        const tickSound = document.getElementById('tickSound');
+        let spins = Math.floor(Math.random() * 5) + 5;
+        let degreesPerSpin = 360;
+        let totalRotation = spins * degreesPerSpin + Math.floor(Math.random() * 360);
+        let currentRotation = rotation;
+        let step = 5;
 
-        const index = Math.floor(((360 - (currentRotation % 360)) % 360) / (360 / wheelOptions.length));
-        setTimeout(() => {
-            document.getElementById('result').innerText = wheelOptions[index];
-        }, 4000);
-    }
-
-    window.onload = () => {
-        const wheel = document.getElementById('wheel');
-        const segmentCount = wheelOptions.length;
-        for (let i = 0; i < segmentCount; i++) {
-            const segment = document.createElement('div');
-            segment.classList.add('segment');
-            segment.style.transform = `rotate(${(360 / segmentCount) * i}deg) skewY(-30deg)`;
-            segment.innerText = wheelOptions[i];
-            wheel.appendChild(segment);
-        }
-    };
-
-    let score = 0;
-
-    function startGame() {
-        score = 0;
-        document.getElementById('score').innerText = 'Skor: 0';
-        const gameArea = document.getElementById('gameArea');
-        gameArea.innerHTML = '';
-        let gameInterval = setInterval(() => {
-            const heart = document.createElement('div');
-            heart.classList.add('fallingHeart');
-            heart.style.left = Math.random() * (gameArea.offsetWidth - 40) + 'px';
-            heart.onclick = () => {
-                score++;
-                document.getElementById('score').innerText = 'Skor: ' + score;
-                heart.remove();
-            };
-            gameArea.appendChild(heart);
-
-            setTimeout(() => {
-                heart.remove();
-            }, 5000);
-        }, 800);
-
-        setTimeout(() => {
-            clearInterval(gameInterval);
-            alert('Oyun bitti! Toplam Skor: ' + score);
-        }, 20000);
-    }
-
-    function openSurprise(message) {
-        document.getElementById('surprise-message').innerText = message;
+        const interval = setInterval(() => {
+            currentRotation += step;
+            wheel.style.transform = `rotate(${currentRotation}deg)`;
+            tickSound.play();
+            if (currentRotation >= rotation + totalRotation) {
+                clearInterval(interval);
+                rotation = currentRotation % 360;
+            }
+        }, 50);
     }
 </script>
 
-</body></html>
+</body>
+</html>

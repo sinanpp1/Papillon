@@ -13,43 +13,9 @@
             background-color: pink;
             font-family: Arial, sans-serif;
         }
-        .wheel-container {
-            position: relative;
-        }
-        .wheel {
-            width: 300px;
-            height: 300px;
-            border: 10px solid #333;
+        canvas {
+            border: 5px solid #333;
             border-radius: 50%;
-            overflow: hidden;
-            position: relative;
-            transition: transform 4s cubic-bezier(0.33, 1, 0.68, 1);
-        }
-        .wheel-segment {
-            position: absolute;
-            width: 50%;
-            height: 50%;
-            top: 50%;
-            left: 50%;
-            transform-origin: 0% 0%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 14px;
-            text-align: center;
-            padding: 5px;
-        }
-        .pointer {
-            width: 0;
-            height: 0;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-bottom: 30px solid red;
-            position: absolute;
-            top: -40px;
-            left: 50%;
-            transform: translateX(-50%);
         }
         button {
             margin-top: 20px;
@@ -57,14 +23,17 @@
             font-size: 16px;
             cursor: pointer;
         }
+        h2 {
+            margin-top: 20px;
+            color: #333;
+        }
     </style>
 </head>
-<body><div class="wheel-container">
-    <div class="pointer"></div>
-    <div class="wheel" id="wheel"></div>
-</div><button onclick="spinWheel()">Çevir</button>
+<body><canvas id="wheel" width="400" height="400"></canvas>
 
-<audio id="tickSound" src="https://www.soundjay.com/button/beep-07.wav"></audio>
+<div class="pointer" style="width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 30px solid red; margin-top: -20px;"></div>
+<button onclick="spinWheel()">Çevir</button>
+<h2 id="result"></h2><audio id="tickSound" src="https://www.soundjay.com/button/beep-07.wav"></audio>
 
 <script>
     const options = [
@@ -78,39 +47,66 @@
     ];
 
     const colors = ['#ff4d4d', '#4d79ff', '#4dff4d', '#ffa64d', '#ff4da6', '#4dffff', '#b84dff'];
+    const canvas = document.getElementById('wheel');
+    const ctx = canvas.getContext('2d');
+    const tickSound = document.getElementById('tickSound');
+    const result = document.getElementById('result');
 
-    const wheel = document.getElementById('wheel');
+    let startAngle = 0;
+    let spinning = false;
+    let anglePerSlice = (2 * Math.PI) / options.length;
 
-    options.forEach((option, index) => {
-        const segment = document.createElement('div');
-        const angle = 360 / options.length;
+    function drawWheel() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        segment.className = 'wheel-segment';
-        segment.style.backgroundColor = colors[index % colors.length];
-        segment.style.transform = `rotate(${index * angle}deg) skewY(-${90 - angle}deg)`;
+        for (let i = 0; i < options.length; i++) {
+            const angle = startAngle + i * anglePerSlice;
 
-        segment.innerHTML = `<div style="transform: skewY(${90 - angle}deg) rotate(${angle / 2}deg);">${option}</div>`;
-        wheel.appendChild(segment);
-    });
+            // Draw slice
+            ctx.beginPath();
+            ctx.moveTo(200, 200);
+            ctx.arc(200, 200, 200, angle, angle + anglePerSlice);
+            ctx.fillStyle = colors[i % colors.length];
+            ctx.fill();
+            ctx.stroke();
 
-    let currentRotation = 0;
+            // Draw text
+            ctx.save();
+            ctx.translate(200, 200);
+            ctx.rotate(angle + anglePerSlice / 2);
+            ctx.textAlign = 'center';
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 16px Arial';
+            ctx.fillText(options[i], 120, 0); // Yazılar daha içte ve tam görünür
+            ctx.restore();
+        }
+    }
+
+    drawWheel();
 
     function spinWheel() {
-        const tickSound = document.getElementById('tickSound');
-        let spinAmount = Math.floor(Math.random() * 360) + 1080; // En az 3 tur dönsün
-        currentRotation += spinAmount;
+        if (spinning) return;
+        spinning = true;
+        result.innerText = '';
 
-        wheel.style.transform = `rotate(${currentRotation}deg)`;
+        let spinAngle = Math.floor(Math.random() * 360) + 1080; // En az 3 tur dönsün
+        let currentSpin = 0;
+        let spinSpeed = 20;
 
-        // Ses efekti için
-        let ticks = 30; // Ses sayısı
-        let interval = setInterval(() => {
+        const spinInterval = setInterval(() => {
+            currentSpin += spinSpeed;
+            startAngle += (spinSpeed * Math.PI) / 180;
+            drawWheel();
             tickSound.play();
-            ticks--;
-            if (ticks <= 0) {
-                clearInterval(interval);
+
+            if (currentSpin >= spinAngle) {
+                clearInterval(spinInterval);
+                spinning = false;
+                let degrees = (startAngle * 180 / Math.PI) % 360;
+                let index = Math.floor((360 - degrees + 90) % 360 / (360 / options.length));
+                result.innerText = `Seçilen: ${options[index]}`;
             }
-        }, 150);
+        }, 50);
     }
 </script></body>
 </html>
